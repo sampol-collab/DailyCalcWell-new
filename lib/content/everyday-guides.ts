@@ -162,6 +162,11 @@ export const EVERYDAY_GUIDES: Record<string, CalculatorGuide> = {
     ],
     faqs: [
       {
+        question: "What is a chronological age calculator and how does it work?",
+        answer:
+          "A chronological age calculator finds the exact calendar time elapsed since your birth date in completed years, months, and remaining days—commonly used for school admissions, official forms, clinical assessments, and age verification.",
+      },
+      {
         question: "How does this calculator handle leap years such as 2000 or 2024?",
         answer:
           "Total days lived includes every February 29 between your birth date and target date using standard Gregorian leap-year rules.",
@@ -214,6 +219,11 @@ export const EVERYDAY_GUIDES: Record<string, CalculatorGuide> = {
       "All calculations operate at UTC calendar dates to prevent daylight-saving hour shifts from changing the date.",
     ],
     faqs: [
+      {
+        question: "How do I find what date will be 60 or 90 days from today?",
+        answer:
+          "Keep today's date as the starting date, select Add (+), enter 60 or 90 in the Days field, and leave years, months, and weeks at 0 to get the exact calendar date and weekday.",
+      },
       {
         question: "What happens if I add 1 month to January 31?",
         answer:
@@ -656,6 +666,11 @@ export const EVERYDAY_GUIDES: Record<string, CalculatorGuide> = {
       "Temperatures below absolute zero (−273.15°C / 0 K) are rejected as physically invalid.",
     ],
     faqs: [
+      {
+        question: "How do I convert cm to feet and inches, kg to lbs, or Celsius to Fahrenheit?",
+        answer:
+          "Select Length, Weight, or Temperature above, choose your starting and target units (such as cm to ft, kg to lb, or °C to °F), and enter any value for an instant NIST-referenced conversion.",
+      },
       {
         question: "Are the conversion factors exact or rounded?",
         answer:

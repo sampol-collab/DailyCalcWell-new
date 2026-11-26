@@ -43,16 +43,21 @@ export function buildWebSiteSchema(locale: Locale = DEFAULT_LOCALE) {
 
 export function buildOrganizationSchema() {
   const siteUrl = getSiteUrl();
+  const publisherName =
+    (process.env.NEXT_PUBLIC_PUBLISHER_NAME || "").trim() || SITE_NAME;
+  const contactEmail =
+    (process.env.NEXT_PUBLIC_CONTACT_EMAIL || "").trim() ||
+    "contact@dailycalcwell.com";
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: SITE_NAME,
+    name: publisherName,
     url: `${siteUrl}/`,
     logo: `${siteUrl}/icon-512.png`,
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer support",
-      email: "contact@dailycalcwell.com",
+      email: contactEmail,
     },
   };
 }

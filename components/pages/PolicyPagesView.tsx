@@ -15,6 +15,15 @@ interface LocaleProp {
   locale?: Locale;
 }
 
+const PUBLISHER_NAME =
+  (process.env.NEXT_PUBLIC_PUBLISHER_NAME || "").trim() || "DailyCalcWell";
+const CONTACT_EMAIL =
+  (process.env.NEXT_PUBLIC_CONTACT_EMAIL || "").trim() ||
+  "contact@dailycalcwell.com";
+const BUSINESS_ADDRESS = (
+  process.env.NEXT_PUBLIC_BUSINESS_ADDRESS || ""
+).trim();
+
 export function AboutPageView({ locale = DEFAULT_LOCALE }: LocaleProp) {
   const ui = getUiDictionary(locale);
   const p = ui.pages.about;
@@ -55,17 +64,24 @@ export function AboutPageView({ locale = DEFAULT_LOCALE }: LocaleProp) {
           </h2>
           <p className="mt-2">
             {p.operatedBy}{" "}
-            <span className="font-medium text-slate-900">
-              [Site Owner / Company Legal Name Placeholder]
-            </span>
+            <span className="font-medium text-slate-900">{PUBLISHER_NAME}</span>
             <br />
             {p.contactEmail}{" "}
-            <span className="font-mono text-sm">contact@dailycalcwell.com</span>
-            <br />
-            {p.location}{" "}
-            <span className="font-medium text-slate-900">
-              [City, State / Country Placeholder]
-            </span>
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="font-mono text-sm text-sky-700 underline hover:text-sky-900"
+            >
+              {CONTACT_EMAIL}
+            </a>
+            {BUSINESS_ADDRESS && (
+              <>
+                <br />
+                {p.location}{" "}
+                <span className="font-medium text-slate-900">
+                  {BUSINESS_ADDRESS}
+                </span>
+              </>
+            )}
           </p>
         </section>
 
@@ -108,35 +124,8 @@ export function ContactPageView({ locale = DEFAULT_LOCALE }: LocaleProp) {
         {p.subtitle}
       </p>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3">
-        <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-5 text-sm text-slate-700">
-          <h2 className="text-base font-bold text-slate-900">
-            {p.detailsHeading}
-          </h2>
-          <p>
-            <span className="block font-semibold text-slate-900">
-              {p.publisherLabel}
-            </span>
-            <span>[Site Owner / Company Name Placeholder]</span>
-          </p>
-          <p>
-            <span className="block font-semibold text-slate-900">
-              {p.emailLabel}
-            </span>
-            <span className="font-mono">contact@dailycalcwell.com</span>
-          </p>
-          <p>
-            <span className="block font-semibold text-slate-900">
-              {p.addressLabel}
-            </span>
-            <span>[Business Mailing Address Placeholder]</span>
-          </p>
-          <p className="text-xs text-slate-500">{p.noteText}</p>
-        </div>
-
-        <div className="md:col-span-2">
-          <ContactForm />
-        </div>
+      <div className="mt-8">
+        <ContactForm />
       </div>
     </div>
   );

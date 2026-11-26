@@ -179,11 +179,12 @@ export interface UiDictionary {
       formTopic: string;
       formMessage: string;
       formSubmit: string;
+      formSubmitting: string;
       formReset: string;
       formSuccessTitle: string;
       formSuccessBody: string;
       topics: { feedback: string; correction: string; privacy: string; business: string };
-      errors: { name: string; email: string; message: string };
+      errors: { name: string; email: string; message: string; submit: string };
     };
     privacy: {
       seoTitle: string;
@@ -478,22 +479,23 @@ const EN_UI: UiDictionary = {
         "Contact the DailyCalcWell team to report a calculation issue, suggest a new everyday or health tool, or ask a privacy and cookie question.",
       title: "Contact Us",
       subtitle:
-        "Have feedback on a formula, noticed a bug, or want to ask about our privacy practices? Reach out using the details or contact form below.",
+        "Have feedback on a formula, noticed a bug, or want to ask about our privacy practices? Reach out using the contact form below.",
       detailsHeading: "Direct Contact Details",
       publisherLabel: "Publisher",
       emailLabel: "Email",
       addressLabel: "Mailing Address",
       noteText:
-        "Note: Replace the bracketed placeholders above with your verified domain email and business details before submitting for Google AdSense review.",
+        "For formula corrections, feature requests, or privacy inquiries, please email us directly. We review messages within 2–3 business days.",
       formName: "Your Name",
       formEmail: "Email Address",
       formTopic: "Topic",
       formMessage: "Message",
       formSubmit: "Send Inquiry",
-      formReset: "Reset Form",
-      formSuccessTitle: "Message Prepared for Review",
+      formSubmitting: "Sending...",
+      formReset: "Send Another Message",
+      formSuccessTitle: "Inquiry Sent",
       formSuccessBody:
-        "Your inquiry has been validated. Because this site does not store form submissions on a database until an email endpoint is configured by the site owner, please also send urgent inquiries directly to",
+        "Thank you for reaching out. Your inquiry has been submitted and we typically review messages within 2–3 business days. For urgent matters, you can also email",
       topics: {
         feedback: "Calculator Feedback or Suggestion",
         correction: "Formula or Content Correction",
@@ -504,6 +506,8 @@ const EN_UI: UiDictionary = {
         name: "Please enter your name.",
         email: "Please enter a valid email address.",
         message: "Please enter a message of at least 10 characters.",
+        submit:
+          "Could not send your inquiry right now. Please try again or email contact@dailycalcwell.com directly.",
       },
     },
     privacy: {
@@ -899,22 +903,23 @@ const HI_UI: UiDictionary = {
         "गणना संबंधी त्रुटि की रिपोर्ट करने, नया दैनिक या स्वास्थ्य कैलकुलेटर सुझाने या गोपनीयता प्रश्न पूछने के लिए DailyCalcWell से संपर्क करें।",
       title: "संपर्क करें",
       subtitle:
-        "किसी सूत्र पर सुझाव, तकनीकी समस्या या गोपनीयता से जुड़ा प्रश्न है? नीचे दिए गए विवरण या फ़ॉर्म का उपयोग करके संपर्क करें।",
+        "किसी सूत्र पर सुझाव, तकनीकी समस्या या गोपनीयता से जुड़ा प्रश्न है? नीचे दिए गए संपर्क फ़ॉर्म का उपयोग करें।",
       detailsHeading: "सीधा संपर्क विवरण",
       publisherLabel: "प्रकाशक",
       emailLabel: "ईमेल",
       addressLabel: "पता",
       noteText:
-        "नोट: Google AdSense समीक्षा से पहले ऊपर दिए गए कोष्ठक प्लेसहोल्डर में अपना वास्तविक व्यावसायिक नाम और पता भरें।",
+        "सूत्र सुधार, नए सुझाव या गोपनीयता संबंधी प्रश्नों के लिए हमें सीधे ईमेल करें। हम 2–3 कार्यदिवसों में उत्तर देते हैं।",
       formName: "आपका नाम",
       formEmail: "ईमेल पता",
       formTopic: "विषय",
       formMessage: "संदेश",
       formSubmit: "संदेश भेजें",
-      formReset: "फ़ॉर्म रीसेट करें",
-      formSuccessTitle: "संदेश समीक्षा के लिए तैयार है",
+      formSubmitting: "भेजा जा रहा है...",
+      formReset: "नया संदेश भेजें",
+      formSuccessTitle: "संदेश भेज दिया गया",
       formSuccessBody:
-        "आपका संदेश सत्यापित हो गया है। आवश्यक या त्वरित पूछताछ के लिए कृपया सीधे इस ईमेल पर लिखें:",
+        "संपर्क करने के लिए धन्यवाद। आपका संदेश भेज दिया गया है और हम सामान्यतः 2–3 कार्यदिवसों में उत्तर देते हैं। आवश्यक विषय के लिए आप ईमेल भी कर सकते हैं:",
       topics: {
         feedback: "कैलकुलेटर सुझाव या प्रतिक्रिया",
         correction: "सूत्र या सामग्री सुधार",
@@ -925,6 +930,8 @@ const HI_UI: UiDictionary = {
         name: "कृपया अपना नाम दर्ज करें।",
         email: "कृपया मान्य ईमेल पता दर्ज करें।",
         message: "कृपया कम से कम 10 अक्षरों का संदेश लिखें।",
+        submit:
+          "अभी आपका संदेश भेजा नहीं जा सका। कृपया पुनः प्रयास करें या सीधे contact@dailycalcwell.com पर ईमेल करें।",
       },
     },
     privacy: {
@@ -1321,22 +1328,23 @@ const ES_UI: UiDictionary = {
         "Contacta al equipo de DailyCalcWell para reportar un error, corregir fórmulas, sugerir una nueva calculadora o consultar sobre privacidad.",
       title: "Contacto",
       subtitle:
-        "¿Tienes comentarios sobre una fórmula, encontraste un error o deseas consultar sobre privacidad? Escríbenos mediante el formulario o los datos de contacto.",
+        "¿Tienes comentarios sobre una fórmula, encontraste un error o deseas consultar sobre privacidad? Escríbenos mediante el formulario de contacto.",
       detailsHeading: "Contacto Directo",
       publisherLabel: "Editor",
       emailLabel: "Correo",
       addressLabel: "Dirección Postal",
       noteText:
-        "Nota: Reemplaza los marcadores entre corchetes con tu nombre comercial y dirección verificada antes de solicitar Google AdSense.",
+        "Para correcciones de fórmulas, sugerencias o consultas de privacidad, escríbenos por correo electrónico. Respondemos en 2–3 días hábiles.",
       formName: "Tu Nombre",
       formEmail: "Correo Electrónico",
       formTopic: "Tema",
       formMessage: "Mensaje",
       formSubmit: "Enviar Consulta",
-      formReset: "Limpiar Formulario",
-      formSuccessTitle: "Mensaje Preparado para Revisión",
+      formSubmitting: "Enviando...",
+      formReset: "Enviar Otro Mensaje",
+      formSuccessTitle: "Consulta Enviada",
       formSuccessBody:
-        "Tu consulta ha sido validada. Para consultas urgentes escribe directamente a",
+        "Gracias por escribirnos. Tu consulta ha sido enviada y normalmente respondemos en 2–3 días hábiles. Para asuntos urgentes, también puedes escribir a",
       topics: {
         feedback: "Sugerencia o comentario",
         correction: "Corrección de fórmula o contenido",
@@ -1347,6 +1355,8 @@ const ES_UI: UiDictionary = {
         name: "Por favor ingresa tu nombre.",
         email: "Por favor ingresa un correo electrónico válido.",
         message: "Por favor ingresa un mensaje de al menos 10 caracteres.",
+        submit:
+          "No se pudo enviar tu consulta en este momento. Inténtalo de nuevo o escribe a contact@dailycalcwell.com.",
       },
     },
     privacy: {
@@ -1743,22 +1753,23 @@ const FR_UI: UiDictionary = {
         "Contactez l'équipe DailyCalcWell pour signaler une erreur de calcul, proposer un nouvel outil ou poser une question sur la confidentialité.",
       title: "Contact",
       subtitle:
-        "Une question sur une formule ou la confidentialité ? Utilisez les coordonnées ou le formulaire ci-dessous.",
+        "Une question sur une formule ou la confidentialité ? Utilisez le formulaire de contact ci-dessous.",
       detailsHeading: "Coordonnées Directes",
       publisherLabel: "Éditeur",
       emailLabel: "E-mail",
       addressLabel: "Adresse Postale",
       noteText:
-        "Note : Remplacez les mentions entre crochets par vos coordonnées vérifiées avant votre demande Google AdSense.",
+        "Pour toute correction de formule, suggestion ou question sur la confidentialité, écrivez-nous par e-mail. Réponse sous 2 à 3 jours ouvrés.",
       formName: "Votre Nom",
       formEmail: "Adresse E-mail",
       formTopic: "Sujet",
       formMessage: "Message",
       formSubmit: "Envoyer",
-      formReset: "Réinitialiser",
-      formSuccessTitle: "Message Prêt pour Examen",
+      formSubmitting: "Envoi en cours...",
+      formReset: "Envoyer un Autre Message",
+      formSuccessTitle: "Message Envoyé",
       formSuccessBody:
-        "Votre demande a été validée. Pour toute urgence, écrivez directement à",
+        "Merci de nous avoir contactés. Votre message a bien été envoyé et nous répondons généralement sous 2 à 3 jours ouvrés. Pour toute urgence, écrivez à",
       topics: {
         feedback: "Suggestion ou avis",
         correction: "Correction de formule",
@@ -1769,6 +1780,8 @@ const FR_UI: UiDictionary = {
         name: "Veuillez saisir votre nom.",
         email: "Veuillez saisir une adresse e-mail valide.",
         message: "Veuillez saisir un message d'au moins 10 caractères.",
+        submit:
+          "Impossible d'envoyer votre message pour le moment. Veuillez réessayer ou écrire à contact@dailycalcwell.com.",
       },
     },
     privacy: {
@@ -2165,22 +2178,23 @@ const DE_UI: UiDictionary = {
         "Kontaktieren Sie das DailyCalcWell-Team bei Fragen zu Formeln, Rechenfehlern, neuen Tool-Vorschlägen oder zum Datenschutz und Cookies.",
       title: "Kontakt",
       subtitle:
-        "Feedback zu einer Formel oder Fragen zum Datenschutz? Nutzen Sie das Formular oder die Kontaktdaten.",
+        "Feedback zu einer Formel oder Fragen zum Datenschutz? Nutzen Sie das Kontaktformular unten.",
       detailsHeading: "Direkter Kontakt",
       publisherLabel: "Herausgeber",
       emailLabel: "E-Mail",
       addressLabel: "Postanschrift",
       noteText:
-        "Hinweis: Ersetzen Sie die Platzhalter vor der Google AdSense-Prüfung durch Ihre echten Firmendaten.",
+        "Für Formelkorrekturen, Verbesserungsvorschläge oder Datenschutzfragen schreiben Sie uns bitte per E-Mail. Antwort innerhalb von 2–3 Werktagen.",
       formName: "Ihr Name",
       formEmail: "E-Mail-Adresse",
       formTopic: "Thema",
       formMessage: "Nachricht",
       formSubmit: "Anfrage senden",
-      formReset: "Zurücksetzen",
-      formSuccessTitle: "Nachricht vorbereitet",
+      formSubmitting: "Wird gesendet...",
+      formReset: "Weitere Nachricht senden",
+      formSuccessTitle: "Anfrage gesendet",
       formSuccessBody:
-        "Ihre Anfrage wurde geprüft. Bei dringenden Anliegen schreiben Sie bitte direkt an",
+        "Vielen Dank für Ihre Nachricht. Ihre Anfrage wurde gesendet und wird in der Regel innerhalb von 2–3 Werktagen beantwortet. Bei dringenden Anliegen schreiben Sie an",
       topics: {
         feedback: "Feedback oder Vorschlag",
         correction: "Formel- oder Inhaltskorrektur",
@@ -2191,6 +2205,8 @@ const DE_UI: UiDictionary = {
         name: "Bitte geben Sie Ihren Namen ein.",
         email: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
         message: "Bitte geben Sie mindestens 10 Zeichen ein.",
+        submit:
+          "Ihre Anfrage konnte derzeit nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie an contact@dailycalcwell.com.",
       },
     },
     privacy: {
@@ -2587,22 +2603,23 @@ const PT_UI: UiDictionary = {
         "Entre em contato com a equipe DailyCalcWell para enviar sugestões de calculadoras, corrigir fórmulas ou tirar dúvidas sobre privacidade.",
       title: "Contato",
       subtitle:
-        "Tem sugestões sobre fórmulas ou dúvidas sobre privacidade? Use os dados ou formulário abaixo.",
+        "Tem sugestões sobre fórmulas ou dúvidas sobre privacidade? Envie sua mensagem pelo formulário abaixo.",
       detailsHeading: "Contato Direto",
       publisherLabel: "Editor",
       emailLabel: "E-mail",
       addressLabel: "Endereço",
       noteText:
-        "Nota: Substitua os marcadores entre colchetes pelos seus dados verificados antes de solicitar o Google AdSense.",
+        "Para correções de fórmulas, sugestões ou dúvidas sobre privacidade, envie um e-mail diretamente. Respondemos em 2–3 dias úteis.",
       formName: "Seu Nome",
       formEmail: "E-mail",
       formTopic: "Assunto",
       formMessage: "Mensagem",
       formSubmit: "Enviar Mensagem",
-      formReset: "Limpar",
-      formSuccessTitle: "Mensagem Pronta",
+      formSubmitting: "Enviando...",
+      formReset: "Enviar Outra Mensagem",
+      formSuccessTitle: "Mensagem Enviada",
       formSuccessBody:
-        "Sua mensagem foi validada. Para assuntos urgentes escreva diretamente para",
+        "Obrigado pelo contato. Sua mensagem foi enviada e costumamos responder em 2–3 dias úteis. Para assuntos urgentes, escreva também para",
       topics: {
         feedback: "Sugestão ou feedback",
         correction: "Correção de fórmula",
@@ -2613,6 +2630,8 @@ const PT_UI: UiDictionary = {
         name: "Informe seu nome.",
         email: "Informe um e-mail válido.",
         message: "Digite uma mensagem com pelo menos 10 caracteres.",
+        submit:
+          "Não foi possível enviar sua mensagem agora. Tente novamente ou escreva para contact@dailycalcwell.com.",
       },
     },
     privacy: {

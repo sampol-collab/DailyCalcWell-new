@@ -225,6 +225,11 @@ export const HEALTH_GUIDES: Record<string, CalculatorGuide> = {
       "This calculator provides general educational estimates only and is not a clinical nutrition prescription. Speak with a doctor or registered dietitian before making major dietary changes, especially if pregnant, nursing, or managing a health condition.",
     faqs: [
       {
+        question: "How do I calculate a safe calorie deficit to lose weight?",
+        answer:
+          "First find your daily maintenance calories (TDEE) using the Mifflin-St Jeor equation and activity multiplier, then subtract a moderate 250 to 500 kcal/day deficit while staying above standard safety floors (1,200 kcal for women, 1,500 kcal for men).",
+      },
+      {
         question: "Why does the calculator stop reducing calories below 1,200 or 1,500 kcal?",
         answer:
           "Public health guidance generally advises against dropping below these thresholds without medical oversight because obtaining essential vitamins, minerals, and protein becomes difficult.",
@@ -511,6 +516,11 @@ export const HEALTH_GUIDES: Record<string, CalculatorGuide> = {
     medicalDisclaimer:
       "This conversion is an educational reference. Always rely on your obstetrician, midwife, or prenatal clinic for official gestational age dating.",
     faqs: [
+      {
+        question: "How many months pregnant is 20 weeks?",
+        answer:
+          "Using an average of 4.33 weeks per calendar month, 20 weeks corresponds to roughly 4.6 months (inside month 5) and sits near the middle of the Second Trimester.",
+      },
       {
         question: "Why is pregnancy 40 weeks if 40 divided by 4 is 10?",
         answer:
