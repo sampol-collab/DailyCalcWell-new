@@ -20,7 +20,10 @@ export function SiteBodyLayout({ locale, children }: SiteBodyLayoutProps) {
   const ui = getUiDictionary(locale);
 
   return (
-    <body className="min-h-screen flex flex-col bg-white text-slate-900">
+    <body
+      suppressHydrationWarning
+      className="min-h-screen flex flex-col bg-white text-slate-900"
+    >
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-[#38BDF8] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-slate-950"

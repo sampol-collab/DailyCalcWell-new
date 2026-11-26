@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalculatorShell } from "@/components/calculators/CalculatorShell";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { trackEvent } from "@/lib/analytics/ga4";
@@ -9,30 +9,60 @@ import {
   calculatePregnancyFromDueDate,
   PregnancyEstimateResult,
 } from "@/lib/calculations/health";
+import { LAST_EDITORIAL_REVIEW } from "@/lib/constants/calculators";
 import { formatISODateUTC, parseISODateUTC } from "@/lib/validation/inputs";
+
+const STATIC_BASE_DATE = parseISODateUTC(LAST_EDITORIAL_REVIEW).ok
+  ? (parseISODateUTC(LAST_EDITORIAL_REVIEW) as { ok: true; value: Date }).value
+  : new Date(Date.UTC(2026, 10, 24));
 
 function todayUTC(): Date {
   const now = new Date();
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 }
 
+function lmpFromBase(base: Date): string {
+  return formatISODateUTC(new Date(base.getTime() - 100 * 86_400_000));
+}
+
+function dueFromBase(base: Date): string {
+  return formatISODateUTC(new Date(base.getTime() + 180 * 86_400_000));
+}
+
 function defaultLmpISO(): string {
-  return formatISODateUTC(new Date(todayUTC().getTime() - 100 * 86_400_000));
+  return lmpFromBase(todayUTC());
 }
 
 function defaultDueISO(): string {
-  return formatISODateUTC(new Date(todayUTC().getTime() + 180 * 86_400_000));
+  return dueFromBase(todayUTC());
 }
+
+const STATIC_LMP_ISO = lmpFromBase(STATIC_BASE_DATE);
+const STATIC_DUE_ISO = dueFromBase(STATIC_BASE_DATE);
 
 export function PregnancyCalculator() {
   const [method, setMethod] = useState<"lmp" | "dueDate">("lmp");
-  const [lmpDate, setLmpDate] = useState(defaultLmpISO);
-  const [dueDate, setDueDate] = useState(defaultDueISO);
+  const [lmpDate, setLmpDate] = useState(STATIC_LMP_ISO);
+  const [dueDate, setDueDate] = useState(STATIC_DUE_ISO);
+  const [baseYear, setBaseYear] = useState(STATIC_BASE_DATE.getUTCFullYear());
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PregnancyEstimateResult | null>(() => {
-    const p = parseISODateUTC(defaultLmpISO(), "Last menstrual period");
-    return p.ok ? calculatePregnancyDueDate(p.value, todayUTC(), 28) : null;
+    const p = parseISODateUTC(STATIC_LMP_ISO, "Last menstrual period");
+    return p.ok ? calculatePregnancyDueDate(p.value, STATIC_BASE_DATE, 28) : null;
   });
+
+  useEffect(() => {
+    const today = todayUTC();
+    const nextLmp = lmpFromBase(today);
+    const nextDue = dueFromBase(today);
+    setLmpDate(nextLmp);
+    setDueDate(nextDue);
+    setBaseYear(today.getUTCFullYear());
+    const p = parseISODateUTC(nextLmp, "Last menstrual period");
+    if (p.ok) {
+      setResult(calculatePregnancyDueDate(p.value, today, 28));
+    }
+  }, []);
 
   const runCalculation = (
     nextMethod = method,
@@ -179,8 +209,8 @@ export function PregnancyCalculator() {
             id="preg-lmp"
             ariaLabel="First Day of Last Menstrual Period"
             value={lmpDate}
-            minYear={todayUTC().getUTCFullYear() - 2}
-            maxYear={todayUTC().getUTCFullYear() + 1}
+            minYear={baseYear - 2}
+            maxYear={baseYear + 1}
             onChange={(nextLmp) => {
               setLmpDate(nextLmp);
               runCalculation("lmp", nextLmp, dueDate);
@@ -196,8 +226,8 @@ export function PregnancyCalculator() {
             id="preg-due"
             ariaLabel="Estimated Due Date"
             value={dueDate}
-            minYear={todayUTC().getUTCFullYear() - 1}
-            maxYear={todayUTC().getUTCFullYear() + 2}
+            minYear={baseYear - 1}
+            maxYear={baseYear + 2}
             onChange={(nextDue) => {
               setDueDate(nextDue);
               runCalculation("dueDate", lmpDate, nextDue);

@@ -1,33 +1,54 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalculatorShell } from "@/components/calculators/CalculatorShell";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { trackEvent } from "@/lib/analytics/ga4";
 import { calculateOvulation, OvulationResult } from "@/lib/calculations/health";
+import { LAST_EDITORIAL_REVIEW } from "@/lib/constants/calculators";
 import {
   formatISODateUTC,
   parseISODateUTC,
   parseNumberInput,
 } from "@/lib/validation/inputs";
 
+const STATIC_BASE_DATE = parseISODateUTC(LAST_EDITORIAL_REVIEW).ok
+  ? (parseISODateUTC(LAST_EDITORIAL_REVIEW) as { ok: true; value: Date }).value
+  : new Date(Date.UTC(2026, 10, 24));
+
+function periodFromBase(base: Date): string {
+  return formatISODateUTC(new Date(base.getTime() - 10 * 86_400_000));
+}
+
 function defaultPeriodISO(): string {
   const now = new Date();
   const today = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
   );
-  return formatISODateUTC(new Date(today.getTime() - 10 * 86_400_000));
+  return periodFromBase(today);
 }
 
+const STATIC_PERIOD_ISO = periodFromBase(STATIC_BASE_DATE);
+
 export function OvulationCalculator() {
-  const initialPeriod = defaultPeriodISO();
-  const [lmpDate, setLmpDate] = useState(initialPeriod);
+  const [lmpDate, setLmpDate] = useState(STATIC_PERIOD_ISO);
   const [cycleLength, setCycleLength] = useState("28");
+  const [baseYear, setBaseYear] = useState(STATIC_BASE_DATE.getUTCFullYear());
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<OvulationResult | null>(() => {
-    const p = parseISODateUTC(initialPeriod, "Last period date");
+    const p = parseISODateUTC(STATIC_PERIOD_ISO, "Last period date");
     return p.ok ? calculateOvulation(p.value, 28) : null;
   });
+
+  useEffect(() => {
+    const nextPeriod = defaultPeriodISO();
+    setLmpDate(nextPeriod);
+    setBaseYear(new Date().getUTCFullYear());
+    const p = parseISODateUTC(nextPeriod, "Last period date");
+    if (p.ok) {
+      setResult(calculateOvulation(p.value, 28));
+    }
+  }, []);
 
   const runCalculation = (nextLmp = lmpDate, nextCycle = cycleLength) => {
     trackEvent("calculator_used", { calculator: "ovulation-calculator" });
@@ -124,8 +145,8 @@ export function OvulationCalculator() {
             id="ovu-lmp"
             ariaLabel="First Day of Last Menstrual Period"
             value={lmpDate}
-            minYear={new Date().getUTCFullYear() - 2}
-            maxYear={new Date().getUTCFullYear() + 1}
+            minYear={baseYear - 2}
+            maxYear={baseYear + 1}
             onChange={(nextLmp) => {
               setLmpDate(nextLmp);
               runCalculation(nextLmp, cycleLength);

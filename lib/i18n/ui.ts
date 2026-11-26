@@ -521,7 +521,7 @@ const EN_UI: UiDictionary = {
         },
         {
           heading: "2. Analytics & Measurement (Optional)",
-          body: "When enabled by the site owner and consented to via our Cookie Preferences banner, we may use Google Analytics 4 (GA4) to understand aggregate traffic patterns. GA4 scripts do not load until you accept analytics cookies, and personal health figures are never sent in analytics events.",
+          body: "When enabled by the site owner, we use Google Analytics 4 (GA4) with Google Consent Mode to understand aggregate traffic patterns. Analytics cookies remain disabled until you accept them in Cookie Preferences, and personal health figures are never sent in analytics events.",
         },
         {
           heading: "3. Advertising & Third-Party Cookies",
@@ -634,7 +634,7 @@ const EN_UI: UiDictionary = {
         },
         {
           heading: "2. Analytics Cookies (Optional)",
-          body: "If Google Analytics 4 is enabled and you opt in, GA4 sets cookies such as _ga to measure aggregate traffic. Analytics scripts stay inactive unless accepted.",
+          body: "If Google Analytics 4 is enabled, analytics cookies such as _ga are only set after you opt in via Cookie Preferences. Without consent, Google Consent Mode keeps analytics storage denied.",
         },
         {
           heading: "3. Advertising Cookies (Optional)",
@@ -942,7 +942,7 @@ const HI_UI: UiDictionary = {
         },
         {
           heading: "2. एनालिटिक्स और मापन (वैकल्पिक)",
-          body: "यदि साइट स्वामी द्वारा सक्षम किया गया हो और आप कुकी वरीयता के माध्यम से सहमति देते हैं, तो हम समग्र ट्रैफ़िक समझने के लिए Google Analytics 4 (GA4) का उपयोग कर सकते हैं। व्यक्तिगत स्वास्थ्य आंकड़े कभी नहीं भेजे जाते।",
+          body: "यदि साइट स्वामी द्वारा सक्षम किया गया हो, तो हम समग्र ट्रैफ़िक समझने के लिए Google Consent Mode के साथ Google Analytics 4 (GA4) का उपयोग करते हैं। आपकी सहमति के बिना एनालिटिक्स कुकीज़ बंद रहती हैं और व्यक्तिगत स्वास्थ्य आंकड़े कभी नहीं भेजे जाते।",
         },
         {
           heading: "3. विज्ञापन और तृतीय-पक्ष कुकीज़",
@@ -1055,7 +1055,7 @@ const HI_UI: UiDictionary = {
         },
         {
           heading: "2. एनालिटिक्स कुकीज़ (वैकल्पिक)",
-          body: "सहमति देने पर Google Analytics 4 समग्र ट्रैफ़िक मापने के लिए कुकीज़ सेट कर सकता है। सहमति के बिना यह निष्क्रिय रहता है।",
+          body: "Google Analytics 4 सक्षम होने पर, _ga जैसी एनालिटिक्स कुकीज़ केवल आपकी सहमति के बाद सेट होती हैं। सहमति के बिना Google Consent Mode स्टोरेज को अस्वीकृत रखता है।",
         },
         {
           heading: "3. विज्ञापन कुकीज़ (वैकल्पिक)",
@@ -1364,7 +1364,7 @@ const ES_UI: UiDictionary = {
         },
         {
           heading: "2. Análisis (Opcional)",
-          body: "Si aceptas las cookies analíticas, Google Analytics 4 mide visitas agregadas sin incluir nunca valores de salud personales.",
+          body: "Cuando está habilitado, Google Analytics 4 usa Google Consent Mode para medir tráfico agregado; las cookies analíticas permanecen desactivadas sin tu consentimiento y nunca se envían datos de salud.",
         },
         {
           heading: "3. Publicidad y Cookies de Terceros",
@@ -1477,7 +1477,7 @@ const ES_UI: UiDictionary = {
         },
         {
           heading: "2. Cookies de Análisis (Opcionales)",
-          body: "Si aceptas, Google Analytics 4 mide tráfico agregado sin datos personales de salud.",
+          body: "Con Google Consent Mode, las cookies de Google Analytics 4 solo se activan si las aceptas y sin incluir datos personales de salud.",
         },
         {
           heading: "3. Cookies Publicitarias (Opcionales)",
@@ -1786,7 +1786,7 @@ const FR_UI: UiDictionary = {
         },
         {
           heading: "2. Mesure d'Audience (Optionnelle)",
-          body: "Si vous acceptez les cookies analytiques, Google Analytics 4 mesure l'audience globale sans aucune donnée personnelle de santé.",
+          body: "Lorsqu'il est activé, Google Analytics 4 utilise Google Consent Mode pour mesurer l'audience globale ; les cookies analytiques restent désactivés sans votre accord et aucune donnée de santé n'est envoyée.",
         },
         {
           heading: "3. Publicité et Cookies Tiers",
@@ -1899,7 +1899,7 @@ const FR_UI: UiDictionary = {
         },
         {
           heading: "2. Cookies Analytiques (Optionnels)",
-          body: "Avec votre accord, Google Analytics 4 mesure l'audience globale sans données de santé.",
+          body: "Avec Google Consent Mode, Google Analytics 4 ne dépose des cookies qu'avec votre accord, sans jamais collecter de données de santé.",
         },
         {
           heading: "3. Cookies Publicitaires (Optionnels)",
@@ -2208,7 +2208,7 @@ const DE_UI: UiDictionary = {
         },
         {
           heading: "2. Analyse (Optional)",
-          body: "Nach Ihrer Einwilligung misst Google Analytics 4 aggregierte Zugriffe ohne Gesundheitsdaten.",
+          body: "Wenn aktiviert, nutzt Google Analytics 4 den Google Consent Mode für aggregierte Zugriffe; Analyse-Cookies bleiben ohne Einwilligung deaktiviert und Gesundheitsdaten werden niemals gesendet.",
         },
         {
           heading: "3. Werbung & Drittanbieter-Cookies",
@@ -2321,7 +2321,7 @@ const DE_UI: UiDictionary = {
         },
         {
           heading: "2. Analyse-Cookies (Optional)",
-          body: "Nur bei Zustimmung misst Google Analytics 4 aggregierte Zugriffe.",
+          body: "Dank Google Consent Mode setzt Google Analytics 4 Analyse-Cookies erst nach Ihrer ausdrücklichen Zustimmung.",
         },
         {
           heading: "3. Werbe-Cookies (Optional)",
@@ -2630,7 +2630,7 @@ const PT_UI: UiDictionary = {
         },
         {
           heading: "2. Análise (Opcional)",
-          body: "Com seu consentimento, o Google Analytics 4 mede tráfego agregado sem dados de saúde.",
+          body: "Quando ativado, o Google Analytics 4 utiliza o Google Consent Mode para medir tráfego agregado; cookies analíticos permanecem bloqueados sem consentimento e dados de saúde nunca são enviados.",
         },
         {
           heading: "3. Publicidade e Cookies",
@@ -2743,7 +2743,7 @@ const PT_UI: UiDictionary = {
         },
         {
           heading: "2. Cookies Analíticos (Opcionais)",
-          body: "Com sua autorização, o Google Analytics 4 mede o tráfego sem dados de saúde.",
+          body: "Com o Google Consent Mode, os cookies do Google Analytics 4 só são definidos após sua autorização, sem dados de saúde.",
         },
         {
           heading: "3. Cookies Publicitários (Opcionais)",

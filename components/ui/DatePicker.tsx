@@ -3,7 +3,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale } from "@/components/i18n/LocaleContext";
-import { LOCALE_CONFIG } from "@/lib/i18n/config";
+import { LAST_EDITORIAL_REVIEW } from "@/lib/constants/calculators";
 import {
   daysInMonth,
   formatISODateUTC,
@@ -18,6 +18,10 @@ function getTodayUTC(): { year: number; month0: number; day: number; iso: string
   const iso = formatISODateUTC(new Date(Date.UTC(year, month0, day)));
   return { year, month0, day, iso };
 }
+
+const DEFAULT_TODAY_YEAR = Number(LAST_EDITORIAL_REVIEW.slice(0, 4)) || 2026;
+const DEFAULT_TODAY_MONTH0 = Math.max(0, (Number(LAST_EDITORIAL_REVIEW.slice(5, 7)) || 11) - 1);
+const DEFAULT_TODAY_DAY = Number(LAST_EDITORIAL_REVIEW.slice(8, 10)) || 24;
 
 export interface DateQuickPreset {
   label: string;
@@ -43,24 +47,32 @@ export function DatePicker({
   presets,
   ariaLabel,
 }: DatePickerProps) {
-  const { locale, ui } = useLocale();
-  const intlLocale = LOCALE_CONFIG[locale].intlLocale;
+  const { ui } = useLocale();
   const monthNames = ui.datePicker.months;
   const weekdays = ui.datePicker.weekdays;
 
   const dialogId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
-  const today = useMemo(() => getTodayUTC(), []);
+  const [today, setToday] = useState({
+    year: DEFAULT_TODAY_YEAR,
+    month0: DEFAULT_TODAY_MONTH0,
+    day: DEFAULT_TODAY_DAY,
+    iso: LAST_EDITORIAL_REVIEW,
+  });
+
+  useEffect(() => {
+    setToday(getTodayUTC());
+  }, []);
 
   const parsedValue = useMemo(() => parseISODateUTC(value), [value]);
   const selectedDate = parsedValue.ok ? parsedValue.value : null;
 
   const [open, setOpen] = useState(false);
   const [viewYear, setViewYear] = useState<number>(() =>
-    selectedDate ? selectedDate.getUTCFullYear() : today.year
+    selectedDate ? selectedDate.getUTCFullYear() : DEFAULT_TODAY_YEAR
   );
   const [viewMonth0, setViewMonth0] = useState<number>(() =>
-    selectedDate ? selectedDate.getUTCMonth() : today.month0
+    selectedDate ? selectedDate.getUTCMonth() : DEFAULT_TODAY_MONTH0
   );
   const [textDraft, setTextDraft] = useState<string>(value);
 
@@ -191,19 +203,11 @@ export function DatePicker({
   };
 
   const displayLabel = selectedDate
-    ? selectedDate.toLocaleDateString(intlLocale, {
-        timeZone: "UTC",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
+    ? `${monthNames[selectedDate.getUTCMonth()]} ${selectedDate.getUTCDate()}, ${selectedDate.getUTCFullYear()}`
     : ui.datePicker.selectDate;
 
   const weekdayLabel = selectedDate
-    ? selectedDate.toLocaleDateString(intlLocale, {
-        timeZone: "UTC",
-        weekday: "short",
-      })
+    ? weekdays[selectedDate.getUTCDay()]
     : null;
 
   return (

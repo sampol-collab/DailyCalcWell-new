@@ -1,14 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLocale } from "@/components/i18n/LocaleContext";
-import { SITE_NAME } from "@/lib/constants/calculators";
+import { LAST_EDITORIAL_REVIEW, SITE_NAME } from "@/lib/constants/calculators";
 import { getLocalizedCalculator } from "@/lib/i18n/calculators-meta";
 import { LOCALE_CONFIG, SUPPORTED_LOCALES, localizePath } from "@/lib/i18n/config";
 
+const DEFAULT_YEAR = Number(LAST_EDITORIAL_REVIEW.slice(0, 4)) || 2026;
+
 export function Footer() {
   const { locale, ui, lPath } = useLocale();
-  const year = new Date().getFullYear();
+  const [year, setYear] = useState(DEFAULT_YEAR);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   const pctCalc = getLocalizedCalculator("percentage-calculator", locale);
   const bmiCalc = getLocalizedCalculator("bmi-calculator", locale);

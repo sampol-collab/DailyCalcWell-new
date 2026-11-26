@@ -34,6 +34,7 @@ export default function RootNotFoundPage() {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${jakarta.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
       <SiteBodyLayout locale="en">

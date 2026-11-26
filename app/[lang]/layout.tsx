@@ -51,6 +51,7 @@ export default async function LocalizedRootLayout({
   return (
     <html
       lang={lang}
+      suppressHydrationWarning
       className={`${jakarta.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
       <SiteBodyLayout locale={lang}>{children}</SiteBodyLayout>

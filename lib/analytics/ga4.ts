@@ -26,6 +26,27 @@ export function readStoredConsent(): ConsentState | null {
   }
 }
 
+export function syncGoogleConsent(
+  analytics: boolean,
+  advertising: boolean
+): void {
+  if (typeof window === "undefined") return;
+  window.dataLayer = window.dataLayer || [];
+  const gtagFn =
+    typeof window.gtag === "function"
+      ? window.gtag
+      : (...args: unknown[]) => {
+          window.dataLayer?.push(args);
+        };
+  window.gtag = gtagFn;
+  gtagFn("consent", "update", {
+    analytics_storage: analytics ? "granted" : "denied",
+    ad_storage: advertising ? "granted" : "denied",
+    ad_user_data: advertising ? "granted" : "denied",
+    ad_personalization: advertising ? "granted" : "denied",
+  });
+}
+
 export function saveStoredConsent(
   analytics: boolean,
   advertising: boolean
@@ -45,6 +66,7 @@ export function saveStoredConsent(
     } catch {
       // Storage may be unavailable in strict private browsing modes
     }
+    syncGoogleConsent(analytics, advertising);
   }
   return state;
 }

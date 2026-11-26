@@ -1,42 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalculatorShell } from "@/components/calculators/CalculatorShell";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { trackEvent } from "@/lib/analytics/ga4";
 import { AgeResult, calculateExactAge } from "@/lib/calculations/everyday";
+import { LAST_EDITORIAL_REVIEW } from "@/lib/constants/calculators";
 import { formatISODateUTC, parseISODateUTC } from "@/lib/validation/inputs";
 
-function yearsAgoISO(yearsAgo: number): string {
-  const now = new Date();
+const STATIC_BASE_DATE = parseISODateUTC(LAST_EDITORIAL_REVIEW).ok
+  ? (parseISODateUTC(LAST_EDITORIAL_REVIEW) as { ok: true; value: Date }).value
+  : new Date(Date.UTC(2026, 10, 24));
+
+function yearsAgoISO(yearsAgo: number, base: Date = STATIC_BASE_DATE): string {
   return formatISODateUTC(
     new Date(
       Date.UTC(
-        now.getUTCFullYear() - yearsAgo,
-        now.getUTCMonth(),
-        Math.min(now.getUTCDate(), 28)
+        base.getUTCFullYear() - yearsAgo,
+        base.getUTCMonth(),
+        Math.min(base.getUTCDate(), 28)
       )
     )
   );
 }
 
-function todayISO(): string {
+function todayUTC(): Date {
   const now = new Date();
-  return formatISODateUTC(
-    new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
-  );
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+}
+
+function todayISO(): string {
+  return formatISODateUTC(todayUTC());
 }
 
 export function AgeCalculator() {
-  const defaultAsOf = todayISO();
   const [dob, setDob] = useState("1995-05-15");
-  const [asOf, setAsOf] = useState(defaultAsOf);
+  const [asOf, setAsOf] = useState(LAST_EDITORIAL_REVIEW);
+  const [maxYear, setMaxYear] = useState(STATIC_BASE_DATE.getUTCFullYear());
+  const [presets, setPresets] = useState(() => [
+    { label: "18 yrs ago", iso: yearsAgoISO(18, STATIC_BASE_DATE) },
+    { label: "25 yrs ago", iso: yearsAgoISO(25, STATIC_BASE_DATE) },
+    { label: "30 yrs ago", iso: yearsAgoISO(30, STATIC_BASE_DATE) },
+    { label: "50 yrs ago", iso: yearsAgoISO(50, STATIC_BASE_DATE) },
+  ]);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AgeResult | null>(() => {
     const d1 = parseISODateUTC("1995-05-15", "Date of birth");
-    const d2 = parseISODateUTC(defaultAsOf, "Target date");
+    const d2 = parseISODateUTC(LAST_EDITORIAL_REVIEW, "Target date");
     return d1.ok && d2.ok ? calculateExactAge(d1.value, d2.value) : null;
   });
+
+  useEffect(() => {
+    const now = todayUTC();
+    const iso = formatISODateUTC(now);
+    setAsOf(iso);
+    setMaxYear(now.getUTCFullYear());
+    setPresets([
+      { label: "18 yrs ago", iso: yearsAgoISO(18, now) },
+      { label: "25 yrs ago", iso: yearsAgoISO(25, now) },
+      { label: "30 yrs ago", iso: yearsAgoISO(30, now) },
+      { label: "50 yrs ago", iso: yearsAgoISO(50, now) },
+    ]);
+    const d1 = parseISODateUTC("1995-05-15", "Date of birth");
+    if (d1.ok) {
+      setResult(calculateExactAge(d1.value, now));
+    }
+  }, []);
 
   const runCalculation = (nextDob = dob, nextAsOf = asOf) => {
     trackEvent("calculator_used", { calculator: "age-calculator" });
@@ -131,13 +160,8 @@ export function AgeCalculator() {
             ariaLabel="Date of Birth"
             value={dob}
             minYear={1900}
-            maxYear={new Date().getUTCFullYear()}
-            presets={[
-              { label: "18 yrs ago", iso: yearsAgoISO(18) },
-              { label: "25 yrs ago", iso: yearsAgoISO(25) },
-              { label: "30 yrs ago", iso: yearsAgoISO(30) },
-              { label: "50 yrs ago", iso: yearsAgoISO(50) },
-            ]}
+            maxYear={maxYear}
+            presets={presets}
             onChange={(nextDob) => {
               setDob(nextDob);
               runCalculation(nextDob, asOf);

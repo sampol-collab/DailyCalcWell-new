@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalculatorShell } from "@/components/calculators/CalculatorShell";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { trackEvent } from "@/lib/analytics/ga4";
@@ -8,6 +8,7 @@ import {
   calculateDateShift,
   DateShiftResult,
 } from "@/lib/calculations/everyday";
+import { LAST_EDITORIAL_REVIEW } from "@/lib/constants/calculators";
 import {
   formatISODateUTC,
   parseISODateUTC,
@@ -22,8 +23,7 @@ function todayISO(): string {
 }
 
 export function DateCalculator() {
-  const initialDate = todayISO();
-  const [startDate, setStartDate] = useState(initialDate);
+  const [startDate, setStartDate] = useState(LAST_EDITORIAL_REVIEW);
   const [operation, setOperation] = useState<"add" | "subtract">("add");
   const [years, setYears] = useState("0");
   const [months, setMonths] = useState("1");
@@ -31,7 +31,7 @@ export function DateCalculator() {
   const [days, setDays] = useState("14");
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<DateShiftResult | null>(() => {
-    const parsed = parseISODateUTC(initialDate, "Start date");
+    const parsed = parseISODateUTC(LAST_EDITORIAL_REVIEW, "Start date");
     return parsed.ok
       ? calculateDateShift({
           startDateUTC: parsed.value,
@@ -43,6 +43,24 @@ export function DateCalculator() {
         })
       : null;
   });
+
+  useEffect(() => {
+    const iso = todayISO();
+    setStartDate(iso);
+    const parsed = parseISODateUTC(iso, "Start date");
+    if (parsed.ok) {
+      setResult(
+        calculateDateShift({
+          startDateUTC: parsed.value,
+          operation: "add",
+          years: 0,
+          months: 1,
+          weeks: 0,
+          days: 14,
+        })
+      );
+    }
+  }, []);
 
   const runCalculation = (
     nextDate = startDate,

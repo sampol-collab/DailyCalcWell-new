@@ -20,11 +20,7 @@ export const ROOT_METADATA: Metadata = {
   description: SITE_TAGLINE,
   applicationName: SITE_NAME,
   icons: {
-    icon: [
-      { url: "/fevicon.svg", type: "image/svg+xml", sizes: "any" },
-      { url: "/icon.png", type: "image/png", sizes: "96x96" },
-      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
-    ],
+    icon: [{ url: "/icon.png", type: "image/png", sizes: "96x96" }],
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   verification: {

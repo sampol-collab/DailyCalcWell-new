@@ -6,16 +6,18 @@ import Script from "next/script";
 import { X } from "lucide-react";
 import { useLocale } from "@/components/i18n/LocaleContext";
 import {
+  CONSENT_STORAGE_KEY,
   ConsentState,
   readStoredConsent,
   saveStoredConsent,
+  syncGoogleConsent,
 } from "@/lib/analytics/ga4";
 
 export function ConsentAndAnalytics() {
   const { ui, lPath } = useLocale();
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+  const gaId = (process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "").trim();
   const adsEnabled = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === "true";
-  const adsClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "";
+  const adsClient = (process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "").trim();
 
   const [consent, setConsent] = useState<ConsentState | null>(null);
   const [hydrated, setHydrated] = useState(false);
@@ -29,6 +31,7 @@ export function ConsentAndAnalytics() {
     if (existing) {
       setAnalyticsDraft(existing.analytics);
       setAdsDraft(existing.advertising);
+      syncGoogleConsent(existing.analytics, existing.advertising);
     }
     setHydrated(true);
 
@@ -69,22 +72,43 @@ export function ConsentAndAnalytics() {
 
   return (
     <>
-      {gaId && consent?.analytics && (
+      {gaId && (
         <>
+          <Script id="dailycalcwell-ga4-init" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+              var initialAnalytics = false;
+              var initialAds = false;
+              try {
+                var saved = window.localStorage.getItem(${JSON.stringify(
+                  CONSENT_STORAGE_KEY
+                )});
+                if (saved) {
+                  var parsed = JSON.parse(saved);
+                  initialAnalytics = Boolean(parsed && parsed.analytics);
+                  initialAds = Boolean(parsed && parsed.advertising);
+                }
+              } catch (e) {}
+              gtag('consent', 'default', {
+                analytics_storage: initialAnalytics ? 'granted' : 'denied',
+                ad_storage: initialAds ? 'granted' : 'denied',
+                ad_user_data: initialAds ? 'granted' : 'denied',
+                ad_personalization: initialAds ? 'granted' : 'denied',
+                wait_for_update: 500
+              });
+              gtag('js', new Date());
+              gtag('config', ${JSON.stringify(gaId)});
+            `}
+          </Script>
           <Script
+            id="dailycalcwell-ga4-src"
             src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(
               gaId
             )}`}
             strategy="afterInteractive"
           />
-          <Script id="dailycalcwell-ga4-init" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${gaId}', { anonymize_ip: true });
-            `}
-          </Script>
         </>
       )}
 

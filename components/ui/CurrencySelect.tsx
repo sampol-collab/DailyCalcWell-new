@@ -122,6 +122,7 @@ export function CurrencySelect({
                     ? "bg-white text-slate-900 shadow-xs font-semibold"
                     : "text-slate-600 hover:text-slate-900"
                 }`}
+                suppressHydrationWarning
               >
                 {opt.code} ({opt.symbol})
               </button>
@@ -142,7 +143,10 @@ export function CurrencySelect({
             <span className="flex items-center gap-2 truncate">
               <Coins className="h-4 w-4 shrink-0 text-sky-600" aria-hidden="true" />
               <span className="font-semibold shrink-0">{selectedOption.code}</span>
-              <span className="truncate text-slate-600">
+              <span
+                suppressHydrationWarning
+                className="truncate text-slate-600"
+              >
                 — {selectedOption.name} ({selectedOption.symbol})
               </span>
             </span>
