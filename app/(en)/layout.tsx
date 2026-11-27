@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteBodyLayout } from "@/components/layout/SiteBodyLayout";
+import { ConsentBootstrap } from "@/components/privacy/ConsentBootstrap";
 import { ROOT_METADATA, ROOT_VIEWPORT } from "@/lib/seo/root-config";
 import "../globals.css";
 
@@ -39,6 +40,9 @@ export default function EnglishRootLayout({
       suppressHydrationWarning
       className={`${jakarta.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <ConsentBootstrap />
+      </head>
       <SiteBodyLayout locale="en">{children}</SiteBodyLayout>
     </html>
   );

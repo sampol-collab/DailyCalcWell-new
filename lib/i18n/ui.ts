@@ -36,11 +36,13 @@ export interface UiDictionary {
     terms: string;
     cookiePolicy: string;
     cookiePreferences: string;
+    privacyChoices: string;
     xmlSitemap: string;
     copyrightSuffix: string;
     regionReady: string;
   };
   consent: {
+    bannerAriaLabel: string;
     bannerText: string;
     preferences: string;
     necessaryOnly: string;
@@ -54,6 +56,8 @@ export interface UiDictionary {
     analyticsDesc: string;
     adsTitle: string;
     adsDesc: string;
+    gpcNotice: string;
+    adLabel: string;
     savePreferences: string;
     closeDialog: string;
   };
@@ -287,14 +291,16 @@ const EN_UI: UiDictionary = {
     terms: "Terms and Conditions",
     cookiePolicy: "Cookie Policy",
     cookiePreferences: "Cookie Preferences",
+    privacyChoices: "Your Privacy Choices",
     xmlSitemap: "XML Sitemap",
     copyrightSuffix:
       "All rights reserved. Informational estimates only; not medical, financial, or legal advice.",
     regionReady: "Metric & Imperial Units · 150+ World Currencies Ready",
   },
   consent: {
+    bannerAriaLabel: "Cookie consent",
     bannerText:
-      "DailyCalcWell uses strictly necessary storage for site preferences. Optional analytics and advertising cookies remain off unless you accept them.",
+      "DailyCalcWell uses storage for site preferences, aggregate analytics, and Google AdSense. In opt-in regions (EEA/UK/CH), optional cookies stay off until accepted; elsewhere you can manage or opt out anytime.",
     preferences: "Preferences",
     necessaryOnly: "Necessary Only",
     acceptAll: "Accept All",
@@ -310,7 +316,10 @@ const EN_UI: UiDictionary = {
       "Helps measure aggregate page views and calculator usage without collecting personal health figures.",
     adsTitle: "Advertising Cookies (Google AdSense)",
     adsDesc:
-      "Supports future Google AdSense display when enabled by the site publisher.",
+      "Allows personalized ads when enabled by the publisher. When turned off, only non-personalized ads are requested.",
+    gpcNotice:
+      "Global Privacy Control (GPC) signal detected: personalized advertising cookies are turned off unless you choose to override this setting.",
+    adLabel: "Advertisement",
     savePreferences: "Save Preferences",
     closeDialog: "Close privacy preferences",
   },
@@ -525,11 +534,11 @@ const EN_UI: UiDictionary = {
         },
         {
           heading: "2. Analytics & Measurement (Optional)",
-          body: "When enabled by the site owner, we use Google Analytics 4 (GA4) with Google Consent Mode to understand aggregate traffic patterns. Analytics cookies remain disabled until you accept them in Cookie Preferences, and personal health figures are never sent in analytics events.",
+          body: "When enabled by the site owner, we use Google Analytics 4 (GA4) with Google Consent Mode to understand aggregate traffic patterns. In opt-in regions (EEA, UK, and Switzerland), analytics cookies stay disabled unless accepted; elsewhere you can opt out anytime in Cookie Preferences, and personal health figures are never sent in analytics events.",
         },
         {
           heading: "3. Advertising & Third-Party Cookies",
-          body: "After site review and approval, DailyCalcWell may display advertisements served by Google AdSense or similar partners. Third-party vendors, including Google, may use cookies to serve ads based on prior visits. Advertising scripts remain disabled unless enabled by the site publisher and permitted through your cookie consent settings.",
+          body: "When enabled by the publisher, DailyCalcWell displays advertisements served by Google AdSense. We honor Google Consent Mode, regional opt-in laws, and Global Privacy Control (GPC) signals: where personalized ad cookies are declined or restricted by region, only non-personalized ads are requested.",
         },
         {
           heading: "4. Server Logs & Hosting Infrastructure",
@@ -638,11 +647,11 @@ const EN_UI: UiDictionary = {
         },
         {
           heading: "2. Analytics Cookies (Optional)",
-          body: "If Google Analytics 4 is enabled, analytics cookies such as _ga are only set after you opt in via Cookie Preferences. Without consent, Google Consent Mode keeps analytics storage denied.",
+          body: "If Google Analytics 4 is enabled, Google Consent Mode keeps analytics storage denied by default in EEA, UK, and Swiss opt-in regions unless you accept. Visitors anywhere can opt out at any time in Cookie Preferences.",
         },
         {
           heading: "3. Advertising Cookies (Optional)",
-          body: "Once advertising is enabled following review and approval, Google AdSense may use cookies where permitted by your consent choice.",
+          body: "When Google AdSense is enabled, personalized advertising cookies are only used where permitted by regional law and your consent settings (and GPC signals). Otherwise, Google AdSense serves non-personalized ads.",
         },
       ],
       manageButton: "Manage Cookie Preferences",
@@ -711,14 +720,16 @@ const HI_UI: UiDictionary = {
     terms: "नियम और शर्तें",
     cookiePolicy: "कुकी नीति",
     cookiePreferences: "कुकी प्राथमिकताएँ",
+    privacyChoices: "आपकी गोपनीयता पसंद",
     xmlSitemap: "XML साइटमैप",
     copyrightSuffix:
       "सर्वाधिकार सुरक्षित। केवल सामान्य जानकारी के लिए; यह चिकित्सा, वित्तीय या कानूनी सलाह नहीं है।",
     regionReady: "मीट्रिक और इंपीरियल इकाइयाँ · 150+ विश्व मुद्राएँ समर्थित",
   },
   consent: {
+    bannerAriaLabel: "कुकी सहमति",
     bannerText:
-      "DailyCalcWell साइट प्राथमिकताओं के लिए आवश्यक स्टोरेज का उपयोग करता है। वैकल्पिक एनालिटिक्स और विज्ञापन कुकीज़ आपकी सहमति के बिना बंद रहती हैं।",
+      "DailyCalcWell साइट प्राथमिकताओं, समग्र एनालिटिक्स और Google AdSense के लिए स्टोरेज उपयोग करता है। ऑप्ट-इन क्षेत्रों (EEA/UK/CH) में वैकल्पिक कुकीज़ सहमति तक बंद रहती हैं; अन्यत्र आप कभी भी विकल्प बदल सकते हैं।",
     preferences: "प्राथमिकताएँ",
     necessaryOnly: "केवल आवश्यक",
     acceptAll: "सभी स्वीकार करें",
@@ -734,7 +745,10 @@ const HI_UI: UiDictionary = {
       "व्यक्तिगत स्वास्थ्य डेटा एकत्र किए बिना पेज व्यू और उपयोग मापने में मदद करता है।",
     adsTitle: "विज्ञापन कुकीज़ (Google AdSense)",
     adsDesc:
-      "प्रकाशक द्वारा सक्षम किए जाने पर भविष्य के Google AdSense विज्ञापनों का समर्थन करता है।",
+      "प्रकाशक द्वारा सक्षम होने पर वैयक्तिकृत विज्ञापन दिखाता है। बंद रखने पर केवल गैर-वैयक्तिकृत विज्ञापन अनुरोधित होते हैं।",
+    gpcNotice:
+      "Global Privacy Control (GPC) सिग्नल सक्रिय है: जब तक आप स्वयं बदलाव न करें, वैयक्तिकृत विज्ञापन कुकीज़ बंद हैं।",
+    adLabel: "विज्ञापन",
     savePreferences: "प्राथमिकताएँ सहेजें",
     closeDialog: "संवाद बंद करें",
   },
@@ -949,11 +963,11 @@ const HI_UI: UiDictionary = {
         },
         {
           heading: "2. एनालिटिक्स और मापन (वैकल्पिक)",
-          body: "यदि साइट स्वामी द्वारा सक्षम किया गया हो, तो हम समग्र ट्रैफ़िक समझने के लिए Google Consent Mode के साथ Google Analytics 4 (GA4) का उपयोग करते हैं। आपकी सहमति के बिना एनालिटिक्स कुकीज़ बंद रहती हैं और व्यक्तिगत स्वास्थ्य आंकड़े कभी नहीं भेजे जाते।",
+          body: "यदि साइट स्वामी द्वारा सक्षम हो, तो हम Google Consent Mode के साथ Google Analytics 4 (GA4) उपयोग करते हैं। EEA, UK और स्विट्ज़रलैंड में सहमति के बिना एनालिटिक्स कुकीज़ बंद रहती हैं; अन्य क्षेत्रों में आप कुकी प्राथमिकताएँ से कभी भी ऑप्ट-आउट कर सकते हैं और स्वास्थ्य डेटा कभी नहीं भेजा जाता।",
         },
         {
           heading: "3. विज्ञापन और तृतीय-पक्ष कुकीज़",
-          body: "स्वीकृति के बाद DailyCalcWell Google AdSense द्वारा विज्ञापन प्रदर्शित कर सकता है। विज्ञापन स्क्रिप्ट तब तक बंद रहती हैं जब तक प्रकाशक उन्हें सक्षम न करे और आपकी सहमति प्राप्त न हो।",
+          body: "सक्षम होने पर DailyCalcWell Google AdSense विज्ञापन दिखाता है। हम क्षेत्रीय कानून, Google Consent Mode और Global Privacy Control (GPC) का पालन करते हैं; सहमति न होने पर केवल गैर-वैयक्तिकृत विज्ञापन अनुरोधित किए जाते हैं।",
         },
         {
           heading: "4. सर्वर लॉग और सुरक्षा",
@@ -1062,11 +1076,11 @@ const HI_UI: UiDictionary = {
         },
         {
           heading: "2. एनालिटिक्स कुकीज़ (वैकल्पिक)",
-          body: "Google Analytics 4 सक्षम होने पर, _ga जैसी एनालिटिक्स कुकीज़ केवल आपकी सहमति के बाद सेट होती हैं। सहमति के बिना Google Consent Mode स्टोरेज को अस्वीकृत रखता है।",
+          body: "Google Analytics 4 सक्षम होने पर, EEA, UK और स्विट्ज़रलैंड में सहमति बिना एनालिटिक्स स्टोरेज अस्वीकृत रहता है। आप कहीं से भी कुकी प्राथमिकताएँ में इसे बंद कर सकते हैं।",
         },
         {
           heading: "3. विज्ञापन कुकीज़ (वैकल्पिक)",
-          body: "साइट अनुमोदन के बाद, आपकी सहमति के अनुसार Google AdSense विज्ञापन कुकीज़ उपयोग कर सकता है।",
+          body: "Google AdSense सक्षम होने पर, वैयक्तिकृत विज्ञापन कुकीज़ केवल क्षेत्रीय नियमों व आपकी सहमति (तथा GPC) के अनुसार उपयोग होती हैं; अन्यथा गैर-वैयक्तिकृत विज्ञापन दिखते हैं।",
         },
       ],
       manageButton: "कुकी प्राथमिकताएँ प्रबंधित करें",
@@ -1136,14 +1150,16 @@ const ES_UI: UiDictionary = {
     terms: "Términos y Condiciones",
     cookiePolicy: "Política de Cookies",
     cookiePreferences: "Preferencias de Cookies",
+    privacyChoices: "Tus Opciones de Privacidad",
     xmlSitemap: "Mapa XML",
     copyrightSuffix:
       "Todos los derechos reservados. Estimaciones informativas únicamente; no sustituyen asesoramiento médico, financiero ni legal.",
     regionReady: "Sistema métrico e imperial · +150 monedas mundiales",
   },
   consent: {
+    bannerAriaLabel: "Consentimiento de cookies",
     bannerText:
-      "DailyCalcWell utiliza almacenamiento estrictamente necesario para tus preferencias. Las cookies opcionales de análisis y publicidad permanecen desactivadas salvo aceptación.",
+      "DailyCalcWell utiliza almacenamiento para preferencias, análisis agregado y Google AdSense. En regiones de consentimiento previo (EEE/RU/CH), las cookies opcionales quedan desactivadas hasta aceptarlas; en el resto puedes gestionarlas en cualquier momento.",
     preferences: "Preferencias",
     necessaryOnly: "Solo Necesarias",
     acceptAll: "Aceptar Todo",
@@ -1159,7 +1175,10 @@ const ES_UI: UiDictionary = {
       "Ayuda a medir visitas agregadas y uso de herramientas sin recopilar cifras de salud personales.",
     adsTitle: "Cookies Publicitarias (Google AdSense)",
     adsDesc:
-      "Admite la futura visualización de Google AdSense cuando sea habilitada por el editor.",
+      "Permite anuncios personalizados cuando el editor habilita AdSense. Si se desactiva, solo se solicitan anuncios no personalizados.",
+    gpcNotice:
+      "Se detectó la señal Global Privacy Control (GPC): las cookies de publicidad personalizada permanecen desactivadas salvo que decidas cambiarlas.",
+    adLabel: "Publicidad",
     savePreferences: "Guardar Preferencias",
     closeDialog: "Cerrar preferencias",
   },
@@ -1374,11 +1393,11 @@ const ES_UI: UiDictionary = {
         },
         {
           heading: "2. Análisis (Opcional)",
-          body: "Cuando está habilitado, Google Analytics 4 usa Google Consent Mode para medir tráfico agregado; las cookies analíticas permanecen desactivadas sin tu consentimiento y nunca se envían datos de salud.",
+          body: "Cuando está habilitado, Google Analytics 4 usa Google Consent Mode para medir tráfico agregado; en el EEE, Reino Unido y Suiza las cookies analíticas permanecen desactivadas sin consentimiento, y en cualquier región puedes desactivarlas en Preferencias de Cookies. Nunca se envían datos de salud.",
         },
         {
           heading: "3. Publicidad y Cookies de Terceros",
-          body: "Tras la aprobación del sitio, Google AdSense puede mostrar anuncios utilizando cookies según tus preferencias de consentimiento.",
+          body: "Cuando el editor lo habilita, Google AdSense muestra anuncios respetando Google Consent Mode, las leyes regionales y señales Global Privacy Control (GPC); cuando las cookies publicitarias se rechazan, se solicitan anuncios no personalizados.",
         },
         {
           heading: "4. Registros Técnicos del Servidor",
@@ -1487,11 +1506,11 @@ const ES_UI: UiDictionary = {
         },
         {
           heading: "2. Cookies de Análisis (Opcionales)",
-          body: "Con Google Consent Mode, las cookies de Google Analytics 4 solo se activan si las aceptas y sin incluir datos personales de salud.",
+          body: "Con Google Consent Mode, en el EEE, Reino Unido y Suiza las cookies de Google Analytics 4 permanecen bloqueadas hasta aceptarlas; en cualquier país puedes desactivarlas desde Preferencias de Cookies.",
         },
         {
           heading: "3. Cookies Publicitarias (Opcionales)",
-          body: "Cuando Google AdSense esté habilitado, solo usará cookies según tu consentimiento.",
+          body: "Cuando Google AdSense está habilitado, las cookies personalizadas solo se usan según las normas regionales, tus preferencias y GPC; de lo contrario se muestran anuncios no personalizados.",
         },
       ],
       manageButton: "Administrar Preferencias de Cookies",
@@ -1561,14 +1580,16 @@ const FR_UI: UiDictionary = {
     terms: "Conditions d'Utilisation",
     cookiePolicy: "Politique de Cookies",
     cookiePreferences: "Préférences Cookies",
+    privacyChoices: "Vos Choix de Confidentialité",
     xmlSitemap: "Sitemap XML",
     copyrightSuffix:
       "Tous droits réservés. Estimations informatives uniquement ; ne remplace pas un avis médical, financier ou juridique.",
     regionReady: "Système métrique & impérial · 150+ devises mondiales",
   },
   consent: {
+    bannerAriaLabel: "Consentement aux cookies",
     bannerText:
-      "DailyCalcWell utilise un stockage strictement nécessaire pour vos préférences. Les cookies analytiques et publicitaires restent désactivés sans votre accord.",
+      "DailyCalcWell utilise un stockage pour vos préférences, la mesure d'audience et Google AdSense. Dans les régions soumises au consentement préalable (EEE/RU/CH), les cookies optionnels restent désactivés sans accord ; ailleurs vous pouvez vous y opposer à tout moment.",
     preferences: "Préférences",
     necessaryOnly: "Nécessaires uniquement",
     acceptAll: "Tout accepter",
@@ -1584,7 +1605,10 @@ const FR_UI: UiDictionary = {
       "Mesure le trafic global sans collecter aucune donnée personnelle de santé.",
     adsTitle: "Cookies Publicitaires (Google AdSense)",
     adsDesc:
-      "Prend en charge l'affichage futur de Google AdSense lorsque activé par l'éditeur.",
+      "Autorise les annonces personnalisées lorsqu'AdSense est activé. En cas de refus, seules des annonces non personnalisées sont demandées.",
+    gpcNotice:
+      "Signal Global Privacy Control (GPC) détecté : les cookies publicitaires personnalisés restent désactivés sauf modification explicite de votre part.",
+    adLabel: "Publicité",
     savePreferences: "Enregistrer",
     closeDialog: "Fermer la fenêtre",
   },
@@ -1799,11 +1823,11 @@ const FR_UI: UiDictionary = {
         },
         {
           heading: "2. Mesure d'Audience (Optionnelle)",
-          body: "Lorsqu'il est activé, Google Analytics 4 utilise Google Consent Mode pour mesurer l'audience globale ; les cookies analytiques restent désactivés sans votre accord et aucune donnée de santé n'est envoyée.",
+          body: "Lorsqu'il est activé, Google Analytics 4 utilise Google Consent Mode : dans l'EEE, au Royaume-Uni et en Suisse, les cookies analytiques restent désactivés sans accord ; partout ailleurs vous pouvez vous désinscrire via Préférences Cookies. Aucune donnée de santé n'est envoyée.",
         },
         {
           heading: "3. Publicité et Cookies Tiers",
-          body: "Après approbation, Google AdSense peut utiliser des cookies selon votre consentement.",
+          body: "Lorsqu'il est activé, Google AdSense respecte Google Consent Mode, les lois régionales et le signal Global Privacy Control (GPC) : sans accord publicitaire, seules des annonces non personnalisées sont demandées.",
         },
         {
           heading: "4. Journaux Techniques",
@@ -1912,11 +1936,11 @@ const FR_UI: UiDictionary = {
         },
         {
           heading: "2. Cookies Analytiques (Optionnels)",
-          body: "Avec Google Consent Mode, Google Analytics 4 ne dépose des cookies qu'avec votre accord, sans jamais collecter de données de santé.",
+          body: "Avec Google Consent Mode, dans l'EEE, au Royaume-Uni et en Suisse, Google Analytics 4 reste bloqué par défaut sans accord ; vous pouvez gérer ce choix à tout moment.",
         },
         {
           heading: "3. Cookies Publicitaires (Optionnels)",
-          body: "Google AdSense n'utilise de cookies publicitaires qu'après activation et consentement.",
+          body: "Lorsque Google AdSense est activé, les cookies personnalisés ne sont utilisés que si la réglementation régionale, votre choix et le signal GPC le permettent ; sinon, des annonces non personnalisées sont diffusées.",
         },
       ],
       manageButton: "Gérer les Préférences Cookies",
@@ -1986,14 +2010,16 @@ const DE_UI: UiDictionary = {
     terms: "Nutzungsbedingungen",
     cookiePolicy: "Cookie-Richtlinie",
     cookiePreferences: "Cookie-Einstellungen",
+    privacyChoices: "Ihre Datenschutzoptionen",
     xmlSitemap: "XML-Sitemap",
     copyrightSuffix:
       "Alle Rechte vorbehalten. Nur zu Informationszwecken; keine medizinische, finanzielle oder rechtliche Beratung.",
     regionReady: "Metrisch & Imperial · 150+ Weltwährungen unterstützt",
   },
   consent: {
+    bannerAriaLabel: "Cookie-Einwilligung",
     bannerText:
-      "DailyCalcWell nutzt technisch notwendige Speicherung für Einstellungen. Optionale Analyse- und Werbe-Cookies bleiben ohne Zustimmung deaktiviert.",
+      "DailyCalcWell nutzt Speicher für Einstellungen, Analyse und Google AdSense. In Regionen mit Einwilligungspflicht (EWR/UK/CH) bleiben optionale Cookies bis zur Zustimmung deaktiviert; überall sonst können Sie jederzeit widersprechen.",
     preferences: "Einstellungen",
     necessaryOnly: "Nur Notwendige",
     acceptAll: "Alle Akzeptieren",
@@ -2009,7 +2035,10 @@ const DE_UI: UiDictionary = {
       "Misst aggregierte Seitenaufrufe ohne Erfassung persönlicher Gesundheitswerte.",
     adsTitle: "Werbe-Cookies (Google AdSense)",
     adsDesc:
-      "Unterstützt künftige Google AdSense-Anzeigen nach Aktivierung durch den Betreiber.",
+      "Erlaubt personalisierte Anzeigen nach Aktivierung durch den Betreiber. Bei Ablehnung werden nur nicht-personalisierte Anzeigen angefordert.",
+    gpcNotice:
+      "Global Privacy Control (GPC)-Signal erkannt: Personalisierte Werbe-Cookies bleiben deaktiviert, sofern Sie dies nicht ausdrücklich ändern.",
+    adLabel: "Anzeige",
     savePreferences: "Auswahl speichern",
     closeDialog: "Dialog schließen",
   },
@@ -2224,11 +2253,11 @@ const DE_UI: UiDictionary = {
         },
         {
           heading: "2. Analyse (Optional)",
-          body: "Wenn aktiviert, nutzt Google Analytics 4 den Google Consent Mode für aggregierte Zugriffe; Analyse-Cookies bleiben ohne Einwilligung deaktiviert und Gesundheitsdaten werden niemals gesendet.",
+          body: "Wenn aktiviert, nutzt Google Analytics 4 den Google Consent Mode: Im EWR, Vereinigten Königreich und der Schweiz bleiben Analyse-Cookies ohne Einwilligung deaktiviert; überall sonst können Sie sie jederzeit abwählen. Gesundheitswerte werden niemals gesendet.",
         },
         {
           heading: "3. Werbung & Drittanbieter-Cookies",
-          body: "Nach Freigabe kann Google AdSense gemäß Ihren Cookie-Einstellungen Anzeigen schalten.",
+          body: "Nach Aktivierung zeigt Google AdSense Anzeigen gemäß Google Consent Mode, regionalem Recht und Global Privacy Control (GPC): Ohne Werbe-Einwilligung werden ausschließlich nicht-personalisierte Anzeigen angefordert.",
         },
         {
           heading: "4. Server-Logs",
@@ -2337,11 +2366,11 @@ const DE_UI: UiDictionary = {
         },
         {
           heading: "2. Analyse-Cookies (Optional)",
-          body: "Dank Google Consent Mode setzt Google Analytics 4 Analyse-Cookies erst nach Ihrer ausdrücklichen Zustimmung.",
+          body: "Mit dem Google Consent Mode bleiben Analyse-Cookies im EWR, Vereinigten Königreich und der Schweiz standardmäßig ohne Zustimmung deaktiviert; Sie können Ihre Auswahl jederzeit ändern.",
         },
         {
           heading: "3. Werbe-Cookies (Optional)",
-          body: "Google AdSense nutzt Cookies erst nach Freigabe und Einwilligung.",
+          body: "Wenn Google AdSense aktiviert ist, werden personalisierte Werbe-Cookies nur gemäß regionalem Recht, Ihrer Auswahl und GPC eingesetzt; andernfalls erscheinen nicht-personalisierte Anzeigen.",
         },
       ],
       manageButton: "Cookie-Einstellungen verwalten",
@@ -2411,14 +2440,16 @@ const PT_UI: UiDictionary = {
     terms: "Termos de Uso",
     cookiePolicy: "Política de Cookies",
     cookiePreferences: "Preferências de Cookies",
+    privacyChoices: "Suas Escolhas de Privacidade",
     xmlSitemap: "Sitemap XML",
     copyrightSuffix:
       "Todos os direitos reservados. Estimativas apenas informativas; não substituem orientação médica, financeira ou jurídica.",
     regionReady: "Métrico e Imperial · +150 moedas mundiais suportadas",
   },
   consent: {
+    bannerAriaLabel: "Consentimento de cookies",
     bannerText:
-      "DailyCalcWell usa armazenamento estritamente necessário para preferências. Cookies opcionais de análise e anúncios permanecem desativados sem aceitação.",
+      "DailyCalcWell usa armazenamento para preferências, análise agregada e Google AdSense. Em regiões com consentimento prévio (EEE/RU/CH), cookies opcionais ficam desativados até você aceitar; nas demais, você pode desativar a qualquer momento.",
     preferences: "Preferências",
     necessaryOnly: "Apenas Necessários",
     acceptAll: "Aceitar Todos",
@@ -2434,7 +2465,10 @@ const PT_UI: UiDictionary = {
       "Ajuda a medir visitas agregadas sem coletar dados pessoais de saúde.",
     adsTitle: "Cookies de Publicidade (Google AdSense)",
     adsDesc:
-      "Suporta exibição futura do Google AdSense quando ativado pelo editor.",
+      "Permite anúncios personalizados quando ativado pelo editor. Quando desativado, apenas anúncios não personalizados são solicitados.",
+    gpcNotice:
+      "Sinal Global Privacy Control (GPC) detectado: cookies de publicidade personalizada estão desativados, a menos que você opte por alterar.",
+    adLabel: "Publicidade",
     savePreferences: "Salvar Preferências",
     closeDialog: "Fechar preferências",
   },
@@ -2649,11 +2683,11 @@ const PT_UI: UiDictionary = {
         },
         {
           heading: "2. Análise (Opcional)",
-          body: "Quando ativado, o Google Analytics 4 utiliza o Google Consent Mode para medir tráfego agregado; cookies analíticos permanecem bloqueados sem consentimento e dados de saúde nunca são enviados.",
+          body: "Quando ativado, o Google Analytics 4 usa o Google Consent Mode: no EEE, Reino Unido e Suíça, cookies analíticos permanecem bloqueados sem aceitação; nas demais regiões, você pode desativar a qualquer momento em Preferências de Cookies. Dados de saúde nunca são enviados.",
         },
         {
           heading: "3. Publicidade e Cookies",
-          body: "Após aprovação, o Google AdSense poderá usar cookies conforme suas preferências.",
+          body: "Quando ativado, o Google AdSense exibe anúncios respeitando o Google Consent Mode, leis regionais e sinais Global Privacy Control (GPC): sem consentimento publicitário, apenas anúncios não personalizados são solicitados.",
         },
         {
           heading: "4. Logs do Servidor",
@@ -2762,11 +2796,11 @@ const PT_UI: UiDictionary = {
         },
         {
           heading: "2. Cookies Analíticos (Opcionais)",
-          body: "Com o Google Consent Mode, os cookies do Google Analytics 4 só são definidos após sua autorização, sem dados de saúde.",
+          body: "Com o Google Consent Mode, no EEE, Reino Unido e Suíça os cookies do Google Analytics 4 ficam bloqueados por padrão até sua autorização; você pode alterar sua escolha quando quiser.",
         },
         {
           heading: "3. Cookies Publicitários (Opcionais)",
-          body: "O Google AdSense usa cookies apenas após ativação e consentimento.",
+          body: "Quando o Google AdSense está ativo, cookies personalizados são usados apenas conforme a lei regional, sua preferência e GPC; caso contrário, são exibidos anúncios não personalizados.",
         },
       ],
       manageButton: "Gerenciar Preferências de Cookies",

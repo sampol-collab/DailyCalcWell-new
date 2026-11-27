@@ -203,6 +203,19 @@ export function Footer() {
                 </button>
               </li>
               <li>
+                <button
+                  type="button"
+                  onClick={() =>
+                    window.dispatchEvent(
+                      new CustomEvent("dailycalcwell-open-cookie-preferences")
+                    )
+                  }
+                  className="text-left text-sky-700 font-medium hover:text-sky-900 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600 rounded-sm"
+                >
+                  {ui.footer.privacyChoices}
+                </button>
+              </li>
+              <li>
                 <a
                   href="/sitemap.xml"
                   className="hover:text-sky-700 hover:underline"

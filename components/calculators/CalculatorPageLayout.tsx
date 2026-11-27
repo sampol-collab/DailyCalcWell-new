@@ -77,7 +77,10 @@ export function CalculatorPageLayout({
 
       <div className="mb-8">{children}</div>
 
-      <AdSlot />
+      <AdSlot
+        key={slug}
+        slotId={process.env.NEXT_PUBLIC_ADSENSE_SLOT_CALCULATOR}
+      />
 
       {guide.medicalDisclaimer && (
         <section

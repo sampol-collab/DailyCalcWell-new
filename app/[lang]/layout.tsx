@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { SiteBodyLayout } from "@/components/layout/SiteBodyLayout";
+import { ConsentBootstrap } from "@/components/privacy/ConsentBootstrap";
 import { isNonDefaultLocale, NON_DEFAULT_LOCALES } from "@/lib/i18n/config";
 import { ROOT_METADATA, ROOT_VIEWPORT } from "@/lib/seo/root-config";
 import "../globals.css";
@@ -54,6 +55,9 @@ export default async function LocalizedRootLayout({
       suppressHydrationWarning
       className={`${jakarta.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <ConsentBootstrap />
+      </head>
       <SiteBodyLayout locale={lang}>{children}</SiteBodyLayout>
     </html>
   );

@@ -1,54 +1,127 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import { X } from "lucide-react";
 import { useLocale } from "@/components/i18n/LocaleContext";
 import {
-  CONSENT_STORAGE_KEY,
   ConsentState,
+  TcfConsentState,
+  getEffectiveConsent,
+  hasGlobalPrivacyControl,
+  parseTcfData,
   readStoredConsent,
   saveStoredConsent,
+  setLatestTcfState,
+  syncAdSenseConsent,
   syncGoogleConsent,
 } from "@/lib/analytics/ga4";
 
 export function ConsentAndAnalytics() {
   const { ui, lPath } = useLocale();
   const gaId = (process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "").trim();
-  const adsEnabled = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === "true";
-  const adsClient = (process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "").trim();
 
   const [consent, setConsent] = useState<ConsentState | null>(null);
+  const [tcfState, setTcfState] = useState<TcfConsentState | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const [analyticsDraft, setAnalyticsDraft] = useState(false);
   const [adsDraft, setAdsDraft] = useState(false);
+  const [gpcActive, setGpcActive] = useState(false);
+  const tcfListenerAttached = useRef(false);
+
+  const attachTcfListener = useCallback(() => {
+    if (
+      tcfListenerAttached.current ||
+      typeof window === "undefined" ||
+      typeof window.__tcfapi !== "function"
+    ) {
+      return;
+    }
+    tcfListenerAttached.current = true;
+    try {
+      window.__tcfapi("addEventListener", 2, (tcData, success) => {
+        if (!success) return;
+        const parsed = parseTcfData(tcData);
+        if (!parsed) return;
+        setLatestTcfState(parsed);
+        setTcfState(parsed);
+        if (parsed.gdprApplies) {
+          setShowPreferences(false);
+        }
+      });
+    } catch {
+      // Ignore TCF listener errors if CMP is unavailable
+    }
+  }, []);
 
   useEffect(() => {
+    attachTcfListener();
+
     const existing = readStoredConsent();
+    const effective = getEffectiveConsent();
     setConsent(existing);
-    if (existing) {
-      setAnalyticsDraft(existing.analytics);
-      setAdsDraft(existing.advertising);
-      syncGoogleConsent(existing.analytics, existing.advertising);
+    setAnalyticsDraft(effective.analytics);
+    setAdsDraft(effective.advertising);
+    setGpcActive(effective.gpcActive);
+
+    if (!effective.managedByGoogleCmp) {
+      if (existing) {
+        syncGoogleConsent(existing.analytics, effective.advertising, false);
+      } else {
+        syncAdSenseConsent(effective.advertising, false);
+      }
     }
+
     setHydrated(true);
 
     const openPrefs = () => {
-      const latest = readStoredConsent();
-      setAnalyticsDraft(Boolean(latest?.analytics));
-      setAdsDraft(Boolean(latest?.advertising));
+      const current = getEffectiveConsent();
+      if (
+        current.managedByGoogleCmp &&
+        typeof window.googlefc?.showRevocationMessage === "function"
+      ) {
+        window.googlefc.showRevocationMessage();
+        return;
+      }
+      setAnalyticsDraft(current.analytics);
+      setAdsDraft(current.advertising);
+      setGpcActive(hasGlobalPrivacyControl());
       setShowPreferences(true);
     };
+
+    let tcfPollTimer: number | null = null;
+    if (!tcfListenerAttached.current) {
+      let attempts = 0;
+      tcfPollTimer = window.setInterval(() => {
+        attempts += 1;
+        attachTcfListener();
+        if (tcfListenerAttached.current || attempts >= 50) {
+          if (tcfPollTimer !== null) {
+            window.clearInterval(tcfPollTimer);
+            tcfPollTimer = null;
+          }
+        }
+      }, 200);
+    }
+
     window.addEventListener("dailycalcwell-open-cookie-preferences", openPrefs);
+    window.addEventListener("dailycalcwell-adsense-loaded", attachTcfListener);
     return () => {
+      if (tcfPollTimer !== null) {
+        window.clearInterval(tcfPollTimer);
+      }
       window.removeEventListener(
         "dailycalcwell-open-cookie-preferences",
         openPrefs
       );
+      window.removeEventListener(
+        "dailycalcwell-adsense-loaded",
+        attachTcfListener
+      );
     };
-  }, []);
+  }, [attachTcfListener]);
 
   const acceptAll = () => {
     const saved = saveStoredConsent(true, true);
@@ -68,7 +141,10 @@ export function ConsentAndAnalytics() {
     setShowPreferences(false);
   };
 
-  const shouldShowBanner = hydrated && consent === null && !showPreferences;
+  const effective = hydrated ? getEffectiveConsent(tcfState) : null;
+  const managedByGoogleCmp = Boolean(effective?.managedByGoogleCmp);
+  const shouldShowBanner =
+    hydrated && consent === null && !showPreferences && !managedByGoogleCmp;
 
   return (
     <>
@@ -77,27 +153,7 @@ export function ConsentAndAnalytics() {
           <Script id="dailycalcwell-ga4-init" strategy="afterInteractive">
             {`
               window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              window.gtag = gtag;
-              var initialAnalytics = false;
-              var initialAds = false;
-              try {
-                var saved = window.localStorage.getItem(${JSON.stringify(
-                  CONSENT_STORAGE_KEY
-                )});
-                if (saved) {
-                  var parsed = JSON.parse(saved);
-                  initialAnalytics = Boolean(parsed && parsed.analytics);
-                  initialAds = Boolean(parsed && parsed.advertising);
-                }
-              } catch (e) {}
-              gtag('consent', 'default', {
-                analytics_storage: initialAnalytics ? 'granted' : 'denied',
-                ad_storage: initialAds ? 'granted' : 'denied',
-                ad_user_data: initialAds ? 'granted' : 'denied',
-                ad_personalization: initialAds ? 'granted' : 'denied',
-                wait_for_update: 500
-              });
+              window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
               gtag('js', new Date());
               gtag('config', ${JSON.stringify(gaId)});
             `}
@@ -112,20 +168,10 @@ export function ConsentAndAnalytics() {
         </>
       )}
 
-      {adsEnabled && adsClient && consent?.advertising && (
-        <Script
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(
-            adsClient
-          )}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-      )}
-
       {shouldShowBanner && (
         <div
           role="region"
-          aria-label="Cookie consent"
+          aria-label={ui.consent.bannerAriaLabel}
           className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur-sm shadow-lg"
         >
           <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
@@ -142,7 +188,13 @@ export function ConsentAndAnalytics() {
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => setShowPreferences(true)}
+                onClick={() => {
+                  const current = getEffectiveConsent(tcfState);
+                  setAnalyticsDraft(current.analytics);
+                  setAdsDraft(current.advertising);
+                  setGpcActive(current.gpcActive);
+                  setShowPreferences(true);
+                }}
                 className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 whitespace-nowrap"
               >
                 {ui.consent.preferences}
@@ -166,7 +218,7 @@ export function ConsentAndAnalytics() {
         </div>
       )}
 
-      {showPreferences && (
+      {showPreferences && !managedByGoogleCmp && (
         <div
           role="dialog"
           aria-modal="true"
@@ -195,6 +247,12 @@ export function ConsentAndAnalytics() {
                 <X className="h-5 w-5" />
               </button>
             </div>
+
+            {gpcActive && (
+              <p className="mt-4 rounded-lg border border-sky-200 bg-sky-50 px-3.5 py-2.5 text-xs leading-relaxed text-sky-900">
+                {ui.consent.gpcNotice}
+              </p>
+            )}
 
             <div className="mt-5 space-y-4">
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">

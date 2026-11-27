@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { getAdSenseClientId } from "@/lib/analytics/ga4-constants";
 import {
   getSiteUrl,
   SITE_NAME,
@@ -25,8 +26,11 @@ export const ROOT_METADATA: Metadata = {
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
-    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
-      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
-      : undefined,
+    other: {
+      "google-adsense-account": getAdSenseClientId(),
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+        ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+        : {}),
+    },
   },
 };
